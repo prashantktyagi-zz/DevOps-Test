@@ -1,0 +1,56 @@
+---
+- ec2_vpc_net:
+    name: "{{ aws_vpc_name }}"
+    state: present
+    cidr_block: 172.22.0.0/16
+    tags: { "Environment":"{{ env_name }}", "Name": "{{ aws_vpc_name }}" }
+    region: "{{ aws_region }}"
+  register: aws_vpc
+
+- set_fact:
+    aws_vpc_id: "{{ aws_vpc.vpc.id }}"
+
+- name: Create subnet for AZ-1
+  ec2_vpc_subnet:
+    state: present
+    vpc_id: "{{ aws_vpc.vpc.id }}"
+    cidr: 172.22.1.0/24
+    az: "{{ aws_az_1 }}"
+    resource_tags: { "Environment":"{{ env_name }}", "Name": "{{ aws_vpc_name }}-{{ aws_az_1 }}" }
+  register: vpc_subnet_1
+
+- set_fact:
+    aws_az1_vpc_subnet_id: "{{ vpc_subnet_1.subnet.id}}"
+
+- name: Create subnet for AZ-2
+  ec2_vpc_subnet:
+    state: present
+    vpc_id: "{{ aws_vpc.vpc.id }}"
+    cidr: 172.22.2.0/24
+    az: "{{ aws_az_2 }}"
+    resource_tags: { "Environment":"{{ env_name }}", "Name": "{{ aws_vpc_name }}-{{ aws_az_2 }}" }
+  register: vpc_subnet_2
+
+- set_fact:
+    aws_az2_vpc_subnet_id: "{{ vpc_subnet_2.subnet.id }}"
+
+- name: create internet gateway
+  ec2_vpc_igw:
+    vpc_id: "{{ aws_vpc.vpc.id }}"
+    region: "{{ aws_region }}"
+    state: present
+  register: igw
+
+- name: Set up public subnet route table
+  ec2_vpc_route_table:
+    vpc_id: "{{ aws_vpc.vpc.id }}"
+    region: "{{ aws_region }}"
+    tags:
+      Name: "route table for {{ aws_vpc_name }}"
+    subnets:
+      - "{{ vpc_subnet_1.subnet.id }}"
+      - "{{ vpc_subnet_2.subnet.id }}"
+    routes:
+      - dest: 0.0.0.0/0
+        gateway_id: "{{ igw.gateway_id }}"
+  register: public_route_table

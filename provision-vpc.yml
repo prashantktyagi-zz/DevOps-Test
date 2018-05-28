@@ -1,0 +1,19 @@
+---
+
+- name: create aws key for Company News
+  hosts: localhost
+  connection: local
+  roles:
+    - { role: aws, dispatch: ['create-key']}
+
+- name: create aws VPC for Company News
+  hosts: localhost
+  connection: local
+  roles:
+    - { role: aws, dispatch: ['create-vpc']}
+
+- name: create aws security groups for Company News
+  hosts: localhost
+  connection: local
+  roles:
+    - { role: aws, dispatch: ['create-security_group']}

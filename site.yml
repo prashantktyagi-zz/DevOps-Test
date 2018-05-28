@@ -1,0 +1,10 @@
+---
+- import_playbook: aws-provision.yml
+
+- import_playbook: install-ngnix.yml
+
+- import_playbook: deploy-static.yml
+
+- import_playbook: install-tomcat.yml
+
+- import_playbook: deploy-war.yml

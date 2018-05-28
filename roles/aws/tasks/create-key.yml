@@ -1,0 +1,10 @@
+---
+  
+- name: create key pair using existing ssh key-pair
+  ec2_key:
+    name: "{{ key_name }}"
+    region: "{{ aws_region }}"
+    force: false
+    state: present
+    wait_timeout: 300
+    key_material: "{{ lookup('file', 'config/id_rsa.pub') }}"

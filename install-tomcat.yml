@@ -1,0 +1,7 @@
+---
+
+- name: install tomcat server
+  hosts: tag_Type_appserver
+  become: true
+  roles:
+    - { role: tomcat, dispatch: ['install']}

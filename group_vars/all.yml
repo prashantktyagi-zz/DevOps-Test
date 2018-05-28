@@ -1,0 +1,12 @@
+---
+
+#aws
+vm_count: 1
+env_name: 'UAT'
+aws_region: 'ap-south-1'
+aws_elb_name: 'CompanyNews-ELB'
+
+#app
+ssl_certificate_name: 'aws_ssl_selfsigned'
+s3_static_app_url: 'https://s3.amazonaws.com/infra-assessment/static.zip'
+s3_war_app_url: 'https://s3.amazonaws.com/infra-assessment/companyNews.war'

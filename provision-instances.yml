@@ -1,0 +1,41 @@
+---
+
+- name: provision web server in zone1 for Company News
+  hosts: localhost
+  connection: local
+  vars:
+      count: "{{ vm_count }}"
+      zone: "{{ aws_az_1 }}"
+      public_faced: 'yes'
+  roles:
+    - { role: aws, dispatch: ['launch-instance'], vpc_subnet_id: "{{ aws_az1_vpc_subnet_id }}", name: "webserver-{{ env_name }}-{{ aws_az_1 }}", type: 'webserver'}
+
+- name: provision web server in zone2 for Company News
+  hosts: localhost
+  connection: local
+  vars:
+      count: "{{ vm_count }}"
+      zone: "{{ aws_az_2 }}"
+      public_faced: 'yes'
+  roles:
+    - { role: aws, dispatch: ['launch-instance'], vpc_subnet_id: "{{ aws_az2_vpc_subnet_id }}", name: "webserver-{{ env_name }}-{{ aws_az_2 }}", type: 'webserver'}
+
+- name: provision app server in Zone1 for Company News
+  hosts: localhost
+  connection: local
+  vars:
+    count: "{{ vm_count }}"
+    zone: "{{ aws_az_1 }}"
+    public_faced: 'yes'
+  roles:
+    - { role: aws, dispatch: ['launch-instance'], vpc_subnet_id: "{{ aws_az1_vpc_subnet_id }}", name: "appserver-{{ env_name }}-{{ aws_az_1 }}", type: 'appserver'}
+
+- name: provision app server in Zone2 for Company News
+  hosts: localhost
+  connection: local
+  vars:
+    count: "{{ vm_count }}"
+    zone: "{{ aws_az_2 }}"
+    public_faced: 'yes'
+  roles:
+    - { role: aws, dispatch: ['launch-instance'], vpc_subnet_id: "{{ aws_az2_vpc_subnet_id }}", name: "appserver-{{ env_name }}-{{ aws_az_2 }}", type: 'appserver'}

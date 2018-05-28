@@ -1,0 +1,9 @@
+---
+
+- name: add the webservers to the load balancer
+  local_action: ec2_elb
+  args:
+   instance_id: "{{ hostvars[{{ inventory_hostname }}].ec2_id }}"
+   ec2_elbs: "{{ aws_elb_name }}"
+   state: absent
+   region: "{{ aws_region }}"

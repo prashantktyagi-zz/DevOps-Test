@@ -1,0 +1,26 @@
+---
+
+- iam_cert:
+    name: "{{ ssl_certificate_name }}"
+    state: present
+    region: "{{ aws_region }}"
+    path: '/ssl-server-certificate/CompanyNews/'
+    cert: "{{ lookup('file', 'config/notsecure.crt') }}"
+    key: "{{ lookup('file', 'config/notsecure.key') }}"
+  register: ssl_cert
+
+- ec2_elb_lb:
+    name: "{{ aws_elb_name }}"
+    state: present
+    security_group_names: "{{ aws_elb_sg_name }}"
+    region: "{{ aws_region }}"
+    subnets:
+      - "{{ aws_az1_vpc_subnet_id }}"
+      - "{{ aws_az2_vpc_subnet_id }}"
+    listeners:
+      - protocol: https
+        load_balancer_port: 443
+        instance_protocol: https
+        instance_port: 8443
+        ssl_certificate_id: "{{ ssl_cert.arn }}"
+  register: aws_elb_company_news

@@ -1,0 +1,14 @@
+---
+
+- name: download static content
+  unarchive:
+    src: "{{ s3_static_app_url }}"
+    dest: "{{ nginx_root }}"
+    remote_src: yes
+
+- name: update server.conf
+  template:
+    src: server.conf.j2
+    dest: /etc/nginx/conf.d/server.conf
+  notify:
+    - restart nginx

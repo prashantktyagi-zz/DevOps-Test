@@ -1,0 +1,7 @@
+---
+
+- name: register instance to ELB for Company News
+  hosts: local
+  connection: local
+  roles:
+    - { role: aws, dispatch: ['register-to-elb']}

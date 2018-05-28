@@ -1,0 +1,27 @@
+---
+
+- name: download war file
+  get_url:
+    url: "{{ s3_war_app_url }}"
+    dest: "{{ tomcat_webapps_path }}"
+    remote_src: yes
+    owner: "{{ tomcat_user }}"
+    group: "{{ tomcat_group }}"
+    mode: 0750
+
+- name: create persistent files dir
+  file:
+    path: '/Users/dcameron/persistence'
+    state: directory
+    owner: "{{ tomcat_user }}"
+    group: "{{ tomcat_group }}"
+
+- name: update server.conf
+  template:
+    src: server.xml.j2
+    dest: "{{ tomcat_conf_path }}/server.xml"
+    owner: "{{ tomcat_user }}"
+    group: "{{ tomcat_group }}"
+    mode: 0750
+  notify:
+    - restart tomcat

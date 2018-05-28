@@ -1,0 +1,74 @@
+---
+
+- name: create ELB security group for Company News
+  ec2_group:
+    name: "{{ elb_sg.sg_name }}"
+    description: "{{ elb_sg.sg_description }}"
+    state: present
+    vpc_id: "{{ aws_vpc_id }}"
+    tags:
+      name: "{{ elb_sg.sg_name }}"
+      purpose: "{{ elb_sg.sg_description }}"
+
+    rules:
+          - proto: tcp
+            from_port: 443
+            to_port: 443
+            cidr_ip: "{{ elb_sg.routable_ip|default([]) }}"
+            group_id: "{{ elb_sg.group_id|default([]) }}"
+    rules_egress:
+          - proto: all
+            cidr_ip: 0.0.0.0/0
+  register: aws_elb_sg
+
+- set_fact:
+    aws_elb_sg_group_id: "{{ aws_elb_sg.group_id }}"
+
+
+- name: create VM security group for Company News
+  ec2_group:
+    name: "{{ vm_sg.sg_name }}"
+    description: "{{ vm_sg.sg_description }}"
+    state: present
+    vpc_id: "{{ aws_vpc_id }}"
+    tags:
+      name: "{{ vm_sg.sg_name }}"
+      purpose: "{{ vm_sg.sg_description }}"
+
+    rules:
+          - proto: tcp
+            from_port: 8443
+            to_port: 8443
+            cidr_ip: "{{ vm_sg.routable_ip|default([]) }}"
+            group_id: "{{ vm_sg.group_id|default([]) }}"
+    rules_egress:
+          - proto: all
+            cidr_ip: 0.0.0.0/0
+  register: aws_vm_sg
+
+- set_fact:
+    aws_vm_sg_group_id: "{{ aws_vm_sg.group_id }}"
+
+- name: create security group for Ansible & jumphost
+  ec2_group:
+    name: "{{ ssh.sg_name }}"
+    description: "{{ ssh.sg_description }}"
+    state: present
+    vpc_id: "{{ aws_vpc_id }}"
+    tags:
+      name: "{{ ssh.sg_name }}"
+      purpose: "{{ ssh.sg_description }}"
+
+    rules:
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: "{{ ssh.routable_ip|default([]) }}"
+            group_id: "{{ ssh.group_id|default([]) }}"
+    rules_egress:
+          - proto: all
+            cidr_ip: 0.0.0.0/0
+  register: ansible_ssh
+
+- set_fact:
+    ansible_ssh_group_id: "{{ ansible_ssh.group_id }}"

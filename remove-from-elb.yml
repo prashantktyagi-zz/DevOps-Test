@@ -1,0 +1,7 @@
+---
+  
+- name: remove instance from ELB for Company News
+  hosts: local
+  connection: local
+  roles:
+    - { role: aws, dispatch: ['remove-from-elb']}

@@ -1,0 +1,7 @@
+---
+
+- import_playbook: provision-vpc.yml
+
+- import_playbook: provision-elb.yml
+
+- import_playbook: provision-instances.yml

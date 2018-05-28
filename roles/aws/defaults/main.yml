@@ -1,0 +1,26 @@
+---
+
+#global
+key_name: 'Company-News-Prashant'
+aws_region: 'ap-south-1'
+aws_az_1: 'ap-south-1a'
+aws_az_2: 'ap-south-1b'
+aws_instance_type: 't2.micro'
+ami_id: 'ami-76d6f519'
+
+#ec2
+
+# app
+ssl_certificate_name: 'aws_ssl_selfsigned'
+
+#vpc
+aws_vpc_name: 'news-public-vpc'
+
+aws_vm_groups: ['company-news-sg', 'aws_ssh']
+elb_sg: { sg_name: 'company-news-elb', sg_description: 'CompanyNews- accept traffic from internet', routable_ip: '0.0.0.0/0' }
+vm_sg: { sg_name: 'company-news-sg',sg_description: 'CompanyNews- accept traffic from ELB', group_id: "{{ aws_elb_sg_group_id }}" }
+ssh: { sg_name: 'aws_ssh',sg_description: 'ansible ssh and jumphost', routable_ip: '0.0.0.0/0' }
+
+#elb
+aws_elb_name: 'CompanyNews-ELB'
+aws_elb_sg_name: "{{ elb_sg.sg_name }}"

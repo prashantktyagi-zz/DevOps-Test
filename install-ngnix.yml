@@ -1,0 +1,7 @@
+---
+
+- name: deploy app content to application server
+  hosts: tag_Type_webserver
+  become: true
+  roles:
+    - { role: ngnix, dispatch: ['install'] }

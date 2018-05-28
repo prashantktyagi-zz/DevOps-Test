@@ -1,0 +1,7 @@
+---
+
+- name: create aws security groups for Company News
+  hosts: localhost
+  connection: local
+  roles:
+    - { role: aws, dispatch: ['create-elb']}

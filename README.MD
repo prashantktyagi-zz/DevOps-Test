@@ -1,6 +1,6 @@
 # Pre-requisite
 
-install ansible on Linux Distro
+Install ansible on Linux Distro
 
 ```bash
 sudo yum install ansible
@@ -16,8 +16,11 @@ Set aws credentails
 ```bash
 touch ~/.aws/credentails
 [default]
-aws
+aws_access_key_id = <your_access_key_here>
+aws_secret_access_key = <your_secret_key_here>
+
 ```
+For more info: http://boto.readthedocs.io/en/latest/boto_config_tut.html
 
 
 # Run playbook
@@ -26,6 +29,6 @@ aws
 ansible-playbook -i ec2.py site.yml
 aws
 
-ISSUE:
+ISSUE FACED:
 
 https://docs.aws.amazon.com/AmazonS3/latest/dev/RESTAuthentication.html#RESTAuthenticationTimeStamp

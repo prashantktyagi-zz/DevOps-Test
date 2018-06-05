@@ -1,3 +1,6 @@
+# Reverse Proxy between AWS ELB and web & app Server
+Nginx can be used to forward request from ELB to static and dynamic content based on url context using forward rules.
+
 # Security
 1. Protect password and ssl key using vault
 2. Use hashed or encrpyed password wherever used
